@@ -53,7 +53,7 @@ def callback():
         return redirect('/top_artists')
     
 @app.route('/top_artists')
-def get_playlists():
+def top_artists():
     if 'access_token' not in session:
         return redirect('/login')
     if datetime.now().timestamp() > session['expires_at']:
@@ -63,8 +63,8 @@ def get_playlists():
         'Authorization': f"Bearer {session['access_token']}"
     }
     response = requests.get(API_BASE_URL + 'me/top/{artists}', headers=headers)
-    playlists = response.json()
-    return jsonify(playlists)
+    top_artists = response.json()
+    return jsonify(top_artists)
 
 @app.route('/refresh-token')
 def refresh_token():
@@ -81,7 +81,7 @@ def refresh_token():
     new_token_info = response.json()
     session['access_token'] = new_token_info['access_token']
     session['expires_at'] = datetime.now().timestamp() + new_token_info['expires_in']
-    return redirect('/playlists')
+    return redirect('/top_artists')
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
