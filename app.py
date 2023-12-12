@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, redirect, request, jsonify, session
+from flask import Flask, redirect, request, jsonify, session, render_template_string
 from datetime import datetime
 import urllib.parse
 
@@ -19,7 +19,7 @@ def index():
 
 @app.route('/login')
 def login():
-    scope = 'user-read-private user-read-email'
+    scope = 'user-read-private user-read-email user-top-read'
     params = {
         'client_id': CLIENT_ID,
         'response_type': 'code',
@@ -62,9 +62,13 @@ def top_artists():
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
     }
-    response = requests.get(API_BASE_URL + 'me/top/{artists}', headers=headers)
-    top_artists = response.json()
-    return jsonify(top_artists)
+    response = requests.get(API_BASE_URL + 'me/top/artists?limit=3', headers=headers)
+    artists = response.content
+    if artists:
+      return render_template_string('<html><body><pre>{{ artists }}</pre></body></html>', artists=artists)
+    else:
+      return "empty response"
+  
 
 @app.route('/refresh-token')
 def refresh_token():
