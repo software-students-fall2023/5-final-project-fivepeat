@@ -1,7 +1,8 @@
 import requests
-from flask import Flask, redirect, request, jsonify, session, render_template_string
+from flask import Flask, redirect, request, jsonify, session, render_template
 from datetime import datetime
 import urllib.parse
+import random
 
 app = Flask(__name__)
 app.secret_key = 'a1w12lje-df2jgd45kjg-s2fs3d8'
@@ -19,7 +20,7 @@ def index():
 
 @app.route('/login')
 def login():
-    scope = 'user-read-private user-read-email user-top-read'
+    scope = 'user-read-private user-read-email user-top-read user-library-read' 
     params = {
         'client_id': CLIENT_ID,
         'response_type': 'code',
@@ -63,11 +64,19 @@ def top_artists():
         'Authorization': f"Bearer {session['access_token']}"
     }
     response = requests.get(API_BASE_URL + 'me/top/artists?limit=3', headers=headers)
-    artists = response.content
-    if artists:
-      return render_template_string('<html><body><pre>{{ artists }}</pre></body></html>', artists=artists)
+    artists_data = response.json().get('items', [])
+    if artists_data:
+        artists_info = []
+        for artist in artists_data:
+            artist_info = {
+                'name': artist.get('name', 'Unknown Artist'),
+                'image_url': artist['images'][0]['url'] if artist.get('images') else None
+            }
+            artists_info.append(artist_info)
+
+        return render_template('top_artists.html', artists=artists_info)
     else:
-      return "empty response"
+        return "empty response"
   
 
 @app.route('/refresh-token')
@@ -86,6 +95,37 @@ def refresh_token():
     session['access_token'] = new_token_info['access_token']
     session['expires_at'] = datetime.now().timestamp() + new_token_info['expires_in']
     return redirect('/top_artists')
-    
+
+@app.route('/quiz')
+def quiz():
+    if 'access_token' not in session:
+        return redirect('/login')
+    if datetime.now().timestamp() > session['expires_at']:
+        return redirect('/refresh-token')
+
+    headers = {
+        'Authorization': f"Bearer {session['access_token']}"
+    }
+    saved_tracks_response = requests.get(API_BASE_URL + 'me/tracks', headers=headers)
+    saved_tracks = saved_tracks_response.json()['items']
+    selected_tracks = random.sample(saved_tracks, 2)
+
+    track_ids = ','.join([track['track']['id'] for track in selected_tracks])
+    features_response = requests.get(API_BASE_URL + f'audio-features?ids={track_ids}', headers=headers)
+    audio_features = features_response.json()['audio_features']
+
+    song1, song2 = selected_tracks
+    if random.choice([True, False]):
+        features1 = [feature for feature in audio_features if feature['id'] == song1['track']['id']][0]
+        features2 = [feature for feature in audio_features if feature['id'] == song2['track']['id']][0]
+    else:
+        features1 = [feature for feature in audio_features if feature['id'] == song2['track']['id']][0]
+        features2 = [feature for feature in audio_features if feature['id'] == song1['track']['id']][0]
+
+    return render_template('quiz.html', song1_name=song1['track'], song2_name=song2['track'], features1=features1, features2=features2)
+
+"""@app.route('/quiz/submit', methods=['POST']) #QUIZ submission goes here?
+def quiz_submit():"""
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
