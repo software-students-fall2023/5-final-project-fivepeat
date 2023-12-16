@@ -127,5 +127,42 @@ def quiz():
 """@app.route('/quiz/submit', methods=['POST']) #QUIZ submission goes here?
 def quiz_submit():"""
 
+@app.route('/random_song')
+def random_song():
+    if 'access_token' not in session:
+        return redirect('/login')
+    if datetime.now().timestamp() > session['expires_at']:
+        return redirect('/refresh-token')
+
+    headers = {
+        'Authorization': f"Bearer {session['access_token']}"
+    }
+
+    response = requests.get(API_BASE_URL + 'browse/featured-playlists', headers=headers)
+    featured_playlists_data = response.json().get('playlists', {}).get('items', [])
+    if featured_playlists_data:
+        selected_playlist = random.choice(featured_playlists_data)
+        playlist_endpoint = selected_playlist['href']
+        playlist_response = requests.get(playlist_endpoint, headers=headers)
+        playlist_data = playlist_response.json()
+
+        tracks_data = playlist_data.get('tracks', {}).get('items', [])
+        if tracks_data:
+            random_track = random.choice(tracks_data)['track']
+            track_info = {
+                'name': random_track.get('name', 'Unknown Track'),
+                'artists': [artist['name'] for artist in random_track.get('artists', [])],
+                'album': random_track.get('album', {}).get('name', 'Unknown Album'),
+                'image_url': random_track.get('album', {}).get('images', [])[0]['url'] if random_track.get('album') else None,
+                'external_url': random_track.get('external_urls', {}).get('spotify', '')
+            }
+
+            return render_template('song_gen.html', track_info=track_info)
+        else:
+            return jsonify({"message": "No tracks found in the selected playlist"})
+    else:
+        return jsonify({"message": "No featured playlists available"})
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

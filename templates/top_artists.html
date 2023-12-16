@@ -58,8 +58,13 @@
         {% endfor %}
     </div>
     <a href="{{ url_for('quiz') }}">
-        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer;">
+        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px;">
             Take Quiz
+        </button>
+    </a>
+    <a href="{{ url_for('random_song') }}">
+        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px;">
+            Recommend Random Song
         </button>
     </a>
 </body>
