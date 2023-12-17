@@ -10,10 +10,16 @@
         body {
             background-color: black;
             color: white;
-            font-family: inherit;
+            font-family: "Arial", sans-serif;
+        }
+        .title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
         .song-container {
             display: flex;
+            justify-content: center;
             align-items: center;
             margin-bottom: 20px;
         }
@@ -21,7 +27,7 @@
             display: flex;
             flex-direction: column; /* Change to column layout */
             align-items: center;
-            margin-right: 20px; /* Space between images and features */
+            margin-right: 20px;
         }
         .song-image {
             width: 150px;
@@ -29,18 +35,25 @@
             border-radius: 5px;  
             border: 2px solid #1DB954;
             background-size: cover;
-            margin-bottom: 10px; /* Space between images and titles */
+            margin-bottom: 10px; 
         }
         .song-title {
             font-size: 18px;
             font-weight: bold;
-            margin-left: 10px; /* Space between image and title */
+            margin-left: 10px; 
         }
         .feature-container {
-            display: flex; /* Display features side by side */
+            display: flex; 
+            justify-content: center;
+            align-items: center;  
+        }
+        .songimg-container {
+            display: flex;
+            flex-direction: column;
         }
         .feature {
-            flex-grow: 1;
+  
+            flex-grow: 0.1;
             margin: 0 5px;
             padding: 10px;
             border: 2px solid #1DB954;
@@ -64,9 +77,11 @@
     </style>
 </head>
 <body>
-    <h2>Quiz Time!</h2>
-
+    <div class="title">
+      <h2>Quiz Time!</h2>
+    </div>  
     <div class="song-container">
+      <div class="songimg-container"></div>
         <div class="song-images">
             <div class="song-image" style="background-image: url('{{ song1_name['album']['images'][0]['url'] if song1_name['album']['images'] else '' }}');"></div>
             <div class="song-title">{{ song1_name['name'] }}</div>
@@ -75,20 +90,21 @@
             <div class="song-image" style="background-image: url('{{ song2_name['album']['images'][0]['url'] if song2_name['album']['images'] else '' }}');"></div>
             <div class="song-title">{{ song2_name['name'] }}</div>
         </div>
-        <div class="feature-container">
-            <div class="feature">
-                <div class="feature-label">Features of Song 1</div>
-                {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
-                    <p>{{ feature_key }}: {{ features1[feature_key] }}</p>
-                {% endfor %}
-            </div>
-            <div class="feature">
-                <div class="feature-label">Features of Song 2</div>
-                {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
-                    <p>{{ feature_key }}: {{ features2[feature_key] }}</p>
-                {% endfor %}
-            </div>
+      </div>
+      <div class="feature-container">
+        <div class="feature">
+            <div class="feature-label">Features of Song 1</div>
+            {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
+                <p>{{ feature_key }}: {{ features1[feature_key] }}</p>
+            {% endfor %}
         </div>
+        <div class="feature">
+            <div class="feature-label">Features of Song 2</div>
+            {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
+                <p>{{ feature_key }}: {{ features2[feature_key] }}</p>
+            {% endfor %}
+        </div>
+      </div>
     </div>
 
 </body>
