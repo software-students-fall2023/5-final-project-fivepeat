@@ -16,7 +16,8 @@ API_BASE_URL = 'https://api.spotify.com/v1/'
 
 @app.route('/')
 def index():
-    return "Welcome to fivepeat <a href='/login'> Login with Spotify</a>"
+    return render_template('welcome.html')
+     
 
 @app.route('/login')
 def login():
