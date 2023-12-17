@@ -10,6 +10,9 @@
             color: white;
             font-family: 'Arial', sans-serif;
             text-align: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .song-container {
@@ -17,7 +20,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: left;
+            text-align: center;
         }
 
         img {
@@ -31,10 +34,26 @@
         .song-info {
             flex-grow: 1;
         }
+
+        .button {
+            display: inline-block;
+            background-color: #1DB954;
+            color: white; 
+            padding: 10px 20px; 
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+
+        .button:hover {
+            background-color: #1ed760; 
+        }
     </style>
 </head>
 <body>
-    <h1>Here's a Recommended Song!</h1>
 
     <div class="song-container">
         <img src="{{ track_info.image_url }}" alt="{{ track_info.name }} Image">
@@ -42,11 +61,11 @@
             <h2>{{ track_info.name }}</h2>
             <p>Artist: {{ track_info.artists | join(', ') }}</p>
             <p>Album: {{ track_info.album }}</p>
-            <p><a href="{{ track_info.external_url }}" target="_blank">Listen on Spotify</a></p>
+            <p><a href="{{ track_info.external_url }}" target="_blank" class="button">Listen on Spotify</a></p>
         </div>
     </div>
     <a href="{{ url_for('top_artists') }}">
-        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer;">
+        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; border-radius: 5px; font-size: 16px">
             Back
         </button>
     </a>
