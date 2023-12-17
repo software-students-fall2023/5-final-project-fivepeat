@@ -64,6 +64,9 @@ def top_artists():
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
     }
+
+    user_info = requests.get(API_BASE_URL + 'me', headers=headers)
+    display_name = user_info.json().get('display_name')
     response = requests.get(API_BASE_URL + 'me/top/artists?limit=3', headers=headers)
     artists_data = response.json().get('items', [])
     if artists_data:
@@ -75,7 +78,7 @@ def top_artists():
             }
             artists_info.append(artist_info)
 
-        return render_template('top_artists.html', artists=artists_info)
+        return render_template('top_artists.html', display_name=display_name, artists=artists_info)
     else:
         return "empty response"
   

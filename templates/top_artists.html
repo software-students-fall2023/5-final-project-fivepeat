@@ -43,8 +43,8 @@
 </head>
 <body>
     <div class="artist-container">
-
-        <h1 class="artists-heading">Your Top Artists</h1>
+        <h1 class="artists-heading">Hi {{ display_name }}!</h1>
+        <h2 class="artists-heading">Your Top Artists</h2>
         
         {% for artist in artists %}
             <div class="artist">
@@ -58,13 +58,13 @@
         {% endfor %}
     </div>
     <a href="{{ url_for('quiz') }}">
-        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px;">
-            Take Quiz
+        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px; border-radius: 5px; font-size: 16px;">
+            Start Quiz
         </button>
     </a>
     <a href="{{ url_for('random_song') }}">
-        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px;">
-            Recommend Random Song
+        <button style="font-family: inherit; color: white; background-color: black; border: 4px solid #1DB954; padding: 5px 10px; cursor: pointer; margin: 5px; border-radius: 5px; font-size: 16px;">
+            Get a Random Song Rec
         </button>
     </a>
 </body>
