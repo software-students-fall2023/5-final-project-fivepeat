@@ -3,6 +3,7 @@ from flask import Flask, redirect, request, jsonify, session, render_template
 from datetime import datetime
 import urllib.parse
 import random
+import db
 
 app = Flask(__name__)
 app.secret_key = 'a1w12lje-df2jgd45kjg-s2fs3d8'
@@ -18,7 +19,6 @@ API_BASE_URL = 'https://api.spotify.com/v1/'
 def index():
     return render_template('welcome.html')
      
-
 @app.route('/login')
 def login():
     scope = 'user-read-private user-read-email user-top-read user-library-read' 
@@ -110,26 +110,38 @@ def quiz():
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
     }
-    saved_tracks_response = requests.get(API_BASE_URL + 'me/tracks', headers=headers)
+    saved_tracks_response = requests.get(API_BASE_URL + 'me/top/tracks?limit=100', headers=headers)
     saved_tracks = saved_tracks_response.json()['items']
     selected_tracks = random.sample(saved_tracks, 2)
 
-    track_ids = ','.join([track['track']['id'] for track in selected_tracks])
+    track_ids = ','.join([track['id'] for track in selected_tracks])
     features_response = requests.get(API_BASE_URL + f'audio-features?ids={track_ids}', headers=headers)
     audio_features = features_response.json()['audio_features']
 
     song1, song2 = selected_tracks
     if random.choice([True, False]):
-        features1 = [feature for feature in audio_features if feature['id'] == song1['track']['id']][0]
-        features2 = [feature for feature in audio_features if feature['id'] == song2['track']['id']][0]
+        features1 = [feature for feature in audio_features if feature['id'] == song1['id']][0]
+        features2 = [feature for feature in audio_features if feature['id'] == song2['id']][0]
+        session['correct_answer'] = song1['id']
     else:
-        features1 = [feature for feature in audio_features if feature['id'] == song2['track']['id']][0]
-        features2 = [feature for feature in audio_features if feature['id'] == song1['track']['id']][0]
+        features1 = [feature for feature in audio_features if feature['id'] == song2['id']][0]
+        features2 = [feature for feature in audio_features if feature['id'] == song1['id']][0]
+        session['correct_answer'] = song2['id']
 
-    return render_template('quiz.html', song1_name=song1['track'], song2_name=song2['track'], features1=features1, features2=features2)
+    return render_template('quiz.html', song1_name=song1, song2_name=song2, features1=features1, features2=features2)
 
-"""@app.route('/quiz/submit', methods=['POST']) #QUIZ submission goes here?
-def quiz_submit():"""
+@app.route('/quiz/submit', methods=['POST'])
+def quiz_submit():
+    submitted_answer = request.form['answer1']
+    correct_answer = session.get('correct_answer')
+
+    if submitted_answer == correct_answer:
+        result = "Correct!"
+        db.collection.update_one({"counter_id": "quiz_counter"}, {"$inc": {"count": 1}})
+    else:
+        result = "Incorrect!"
+
+    return render_template('quiz_result.html', result=result)
 
 @app.route('/random_song')
 def random_song():
