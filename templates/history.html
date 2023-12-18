@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz History</title>
+</head>
+<body>
+    <h1>Quiz History</h1>
+    <ul>
+        {% for quiz in quiz_history %}
+            <li>
+                <h3>Quiz Attempt</h3>
+                <div>
+                    <strong>Song 1:</strong> {{ quiz['Song 1 Name'] }}
+                    <p><strong>Features:</strong> {{ quiz['Song 1 Features'] | tojson }}</p>
+                </div>
+                <div>
+                    <strong>Song 2:</strong> {{ quiz['Song 2 Name'] }}
+                    <p><strong>Features:</strong> {{ quiz['Song 2 Features'] | tojson }}</p>
+                </div>
+                <div><strong>Result:</strong> {{ quiz['Result'] }}</div>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
