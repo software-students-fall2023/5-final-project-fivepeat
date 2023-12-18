@@ -115,10 +115,10 @@
           Is song 1 {{ song1_name['name'] }} or {{ song2_name['name'] }}?
         </div>
         <div class="answer-container">
-          <input type="radio" id="option1_song1" name="answer1" value="option1">
-          <label for="option1_song1">{{ song1_name['name'] }}</label><br>
-          <input type="radio" id="option2_song1" name="answer1" value="option2">
-          <label for="option2_song1">{{ song2_name['name'] }} </label><br>
+          <input type="radio" id="option1" name="answer1" value="{{ song1_name['id'] }}">
+          <label for="option1">{{ song1_name['name'] }}</label><br>
+          <input type="radio" id="option2" name="answer1" value="{{ song2_name['id'] }}">
+          <label for="option2">{{ song2_name['name'] }} </label><br>
           <input type="submit" value="Submit">
         </div>
 
