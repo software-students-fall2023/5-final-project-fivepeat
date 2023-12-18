@@ -158,7 +158,9 @@ def quiz_submit():
         "Song 2 Features": quiz_data['features2'],
         "Song 1 Image URL": quiz_data['song1_image_url'],
         "Song 2 Image URL": quiz_data['song2_image_url'],
-        "Result": result
+        "Result": result,
+        "timestamp_field": datetime.utcnow()
+
     }
 
     db.collection.insert_one(data)

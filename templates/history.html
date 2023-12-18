@@ -2,26 +2,44 @@
 <html>
 <head>
     <title>Quiz History</title>
+    <link rel="stylesheet" href="/static/css/history.css">
 </head>
 <body>
     <h1>Quiz History</h1>
     <ul>
         {% for quiz in quiz_history %}
-            <li>
-                <h3>Quiz Attempt</h3>
-                <div>
-                    <img src="{{ quiz['Song 1 Image URL'] }}" alt="{{ quiz['Song 1 Name'] }}" style="max-width: 200px; height: auto;">
+            <li class="quiz-box {{ 'correct' if quiz['Result'] == 'Correct!' else 'incorrect' }}">
+                <div class="song">
+                    <img src="{{ quiz['Song 1 Image URL'] }}" alt="{{ quiz['Song 1 Name'] }}">
                     <strong>Song 1:</strong> {{ quiz['Song 1 Name'] }}
-                    {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
-                    <p>{{ feature_key }}: {{ quiz['Song 1 Features'][feature_key] }}</p>
-                    {% endfor %}
+                    <div class="features">
+                        <div class="column">
+                            {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy'] %}
+                            <p>{{ feature_key }}: {{ quiz['Song 1 Features'][feature_key] }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="column">
+                            {% for feature_key in ['liveness', 'loudness', 'tempo', 'valence'] %}
+                            <p>{{ feature_key }}: {{ quiz['Song 1 Features'][feature_key] }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <img src="{{ quiz['Song 2 Image URL'] }}" alt="{{ quiz['Song 2 Name'] }}" style="max-width: 200px; height: auto;">
+                <div class="song">
+                    <img src="{{ quiz['Song 2 Image URL'] }}" alt="{{ quiz['Song 2 Name'] }}">
                     <strong>Song 2:</strong> {{ quiz['Song 2 Name'] }}
-                    {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
-                    <p>{{ feature_key }}: {{ quiz['Song 2 Features'][feature_key] }}</p>
-                    {% endfor %}               
+                    <div class="features">
+                        <div class="column">
+                            {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy'] %}
+                            <p>{{ feature_key }}: {{ quiz['Song 2 Features'][feature_key] }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="column">
+                            {% for feature_key in ['liveness', 'loudness', 'tempo', 'valence'] %}
+                            <p>{{ feature_key }}: {{ quiz['Song 2 Features'][feature_key] }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>            
                 </div>
                 <div><strong>Result:</strong> {{ quiz['Result'] }}</div>
             </li>
