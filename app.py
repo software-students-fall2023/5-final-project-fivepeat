@@ -132,7 +132,9 @@ def quiz():
         'song1': song1,
         'song2': song2,
         'features1': features1,
-        'features2': features2
+        'features2': features2,
+        'song1_image_url': selected_tracks[0].get('album', {}).get('images', [])[0]['url'] if selected_tracks[0].get('album') else None,
+        'song2_image_url': selected_tracks[1].get('album', {}).get('images', [])[0]['url'] if selected_tracks[1].get('album') else None
     }
 
     return render_template('quiz.html', song1_name=song1, song2_name=song2, features1=features1, features2=features2)
@@ -154,6 +156,8 @@ def quiz_submit():
         "Song 1 Features": quiz_data['features1'],
         "Song 2 Name": quiz_data['song2']['name'],
         "Song 2 Features": quiz_data['features2'],
+        "Song 1 Image URL": quiz_data['song1_image_url'],
+        "Song 2 Image URL": quiz_data['song2_image_url'],
         "Result": result
     }
 

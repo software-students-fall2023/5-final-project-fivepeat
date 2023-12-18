@@ -10,12 +10,14 @@
             <li>
                 <h3>Quiz Attempt</h3>
                 <div>
+                    <img src="{{ quiz['Song 1 Image URL'] }}" alt="{{ quiz['Song 1 Name'] }}" style="max-width: 200px; height: auto;">
                     <strong>Song 1:</strong> {{ quiz['Song 1 Name'] }}
                     {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
                     <p>{{ feature_key }}: {{ quiz['Song 1 Features'][feature_key] }}</p>
                     {% endfor %}
                 </div>
                 <div>
+                    <img src="{{ quiz['Song 2 Image URL'] }}" alt="{{ quiz['Song 2 Name'] }}" style="max-width: 200px; height: auto;">
                     <strong>Song 2:</strong> {{ quiz['Song 2 Name'] }}
                     {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
                     <p>{{ feature_key }}: {{ quiz['Song 2 Features'][feature_key] }}</p>
