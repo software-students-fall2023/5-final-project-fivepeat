@@ -205,7 +205,7 @@ def random_song():
 def history():
     if 'access_token' not in session:
         return redirect('/login')
-    quiz_history = db.collection.find()
+    quiz_history = db.collection.find().sort("timestamp_field", -1)
     return render_template('history.html', quiz_history=quiz_history)
 
 
