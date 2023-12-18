@@ -127,6 +127,15 @@ def quiz():
         features1 = [feature for feature in audio_features if feature['id'] == song2['id']][0]
         features2 = [feature for feature in audio_features if feature['id'] == song1['id']][0]
         session['correct_answer'] = song2['id']
+    
+    session['quiz_data'] = {
+        'song1': song1,
+        'song2': song2,
+        'features1': features1,
+        'features2': features2,
+        'song1_image_url': selected_tracks[0].get('album', {}).get('images', [])[0]['url'] if selected_tracks[0].get('album') else None,
+        'song2_image_url': selected_tracks[1].get('album', {}).get('images', [])[0]['url'] if selected_tracks[1].get('album') else None
+    }
 
     return render_template('quiz.html', song1_name=song1, song2_name=song2, features1=features1, features2=features2)
 
@@ -134,12 +143,27 @@ def quiz():
 def quiz_submit():
     submitted_answer = request.form['answer1']
     correct_answer = session.get('correct_answer')
-
+    quiz_data = session.get('quiz_data', {})
+    
     if submitted_answer == correct_answer:
         result = "Correct!"
-        db.collection.update_one({"counter_id": "quiz_counter"}, {"$inc": {"count": 1}})
     else:
         result = "Incorrect!"
+    
+    """Saves quiz into the MongoDB database"""
+    data = {
+        "Song 1 Name": quiz_data['song1']['name'],
+        "Song 1 Features": quiz_data['features1'],
+        "Song 2 Name": quiz_data['song2']['name'],
+        "Song 2 Features": quiz_data['features2'],
+        "Song 1 Image URL": quiz_data['song1_image_url'],
+        "Song 2 Image URL": quiz_data['song2_image_url'],
+        "Result": result,
+        "timestamp_field": datetime.utcnow()
+
+    }
+
+    db.collection.insert_one(data)
 
     return render_template('quiz_result.html', result=result)
 
@@ -178,6 +202,13 @@ def random_song():
             return jsonify({"message": "No tracks found in the selected playlist"})
     else:
         return jsonify({"message": "No featured playlists available"})
+
+@app.route('/history')
+def history():
+    if 'access_token' not in session:
+        return redirect('/login')
+    quiz_history = db.collection.find().sort("timestamp_field", -1)
+    return render_template('history.html', quiz_history=quiz_history)
 
 
 if __name__ == '__main__':
