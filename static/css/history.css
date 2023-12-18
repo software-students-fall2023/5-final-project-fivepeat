@@ -82,3 +82,25 @@ li {
     font-size: 0.5em; 
 }
 
+.navigation-buttons {
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #000;
+    background-color: #1DB954;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #f4f4f4;
+    color: #333;
+}
