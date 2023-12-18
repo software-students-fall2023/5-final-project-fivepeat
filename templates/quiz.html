@@ -65,15 +65,20 @@
             text-align: center;
             margin-bottom: 10px;
         }
-        .top-section {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        .submit-section {
-            text-align: center;
+        .question-container {
             margin-top: 20px;
+            display: flex; 
+            justify-content: center;
+            align-items: center;  
         }
+        .answer-container {
+            margin-top: 20px;
+            display: flex; 
+            justify-content: center;
+            align-items: center;  
+        }
+
+
     </style>
 </head>
 <body>
@@ -105,6 +110,19 @@
             {% endfor %}
         </div>
       </div>
+      <form action="{{ url_for('quiz_submit') }}" method="post">
+        <div class="question-container"> 
+          Is song 1 {{ song1_name['name'] }} or {{ song2_name['name'] }}?
+        </div>
+        <div class="answer-container">
+          <input type="radio" id="option1_song1" name="answer1" value="option1">
+          <label for="option1_song1">{{ song1_name['name'] }}</label><br>
+          <input type="radio" id="option2_song1" name="answer1" value="option2">
+          <label for="option2_song1">{{ song2_name['name'] }} </label><br>
+          <input type="submit" value="Submit">
+        </div>
+
+      </form>
     </div>
 
 </body>
