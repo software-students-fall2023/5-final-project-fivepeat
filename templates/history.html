@@ -11,11 +11,15 @@
                 <h3>Quiz Attempt</h3>
                 <div>
                     <strong>Song 1:</strong> {{ quiz['Song 1 Name'] }}
-                    <p><strong>Features:</strong> {{ quiz['Song 1 Features'] | tojson }}</p>
+                    {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
+                    <p>{{ feature_key }}: {{ quiz['Song 1 Features'][feature_key] }}</p>
+                    {% endfor %}
                 </div>
                 <div>
                     <strong>Song 2:</strong> {{ quiz['Song 2 Name'] }}
-                    <p><strong>Features:</strong> {{ quiz['Song 2 Features'] | tojson }}</p>
+                    {% for feature_key in ['acousticness', 'danceability', 'duration_ms', 'energy', 'liveness', 'loudness', 'tempo', 'valence'] %}
+                    <p>{{ feature_key }}: {{ quiz['Song 2 Features'][feature_key] }}</p>
+                    {% endfor %}               
                 </div>
                 <div><strong>Result:</strong> {{ quiz['Result'] }}</div>
             </li>
