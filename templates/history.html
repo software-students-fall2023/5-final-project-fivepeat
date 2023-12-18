@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>Quiz History</h1>
+    <div class="navigation-buttons">
+        <a href="/quiz" class="btn">Take Another Quiz</a>
+        <a href="/top_artists" class="btn">Home</a>
+    </div>
     <ul>
         {% for quiz in quiz_history %}
             <li class="quiz-box {{ 'correct' if quiz['Result'] == 'Correct!' else 'incorrect' }}">
