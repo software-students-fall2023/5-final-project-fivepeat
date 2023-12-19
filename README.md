@@ -11,6 +11,7 @@ Continuous delivery to Docker Hub: https://hub.docker.com/repository/docker/mega
 ## Instructions to Run
 
 In the root directory, run ```docker-compose up --build```
+
 Navigate to localhost:5000 to access the web app
 
 ### Contributors
