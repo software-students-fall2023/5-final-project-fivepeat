@@ -302,3 +302,57 @@ def test_top_artists_redirects_to_refresh_token_when_expired(mock_response_1, mo
     response = client.get('/top_artists')
     assert response.status_code == 302
     assert response.location == '/refresh-token'
+
+'''@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        yield client
+
+@patch('app.requests.get')
+@patch('app.requests.get')
+def test_quiz_route(mock_features_response, mock_tracks_response, client):
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'test_access_token'
+        sess['expires_at'] = (datetime.now() + timedelta(hours=1)).timestamp()
+
+    # Mock API responses for saved tracks and audio features
+    mock_tracks_response.return_value.json.return_value = {
+        'items': [
+            {'id': 'song1_id', 'name': 'Song 1'},
+            {'id': 'song2_id', 'name': 'Song 2'}
+        ]
+    }
+    mock_features_response.return_value.json.return_value = {
+        # Simulating an empty response or response without 'audio_features'
+        # Adjust as needed based on your requirements for testing this behavior
+    }
+
+    response = client.get('/quiz')
+    assert response.status_code == 302  # Assuming it redirects to '/refresh-token' due to missing 'audio_features'''
+
+
+@pytest.fixture
+def client():
+    with app.test_client() as client:
+        yield client
+
+@patch('app.requests.get')
+def test_random_song_route(mock_get, client):
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'test_access_token'
+        sess['expires_at'] = (datetime.now() + timedelta(hours=1)).timestamp()
+
+    # Mock API response for featured playlists
+    mock_get.return_value.json.return_value = {'playlists': {'items': [{'href': 'playlist_link'}]}}
+    
+    # Mock API response for playlist tracks
+    mock_get.side_effect = [
+        MagicMock(json=lambda: {'tracks': {'items': [{'track': {'name': 'Track Name'}}]}})
+    ]
+
+    # Run the random_song route
+    response = client.get('/random_song')
+
+    # Perform assertions
+    assert b'Track Name' in response.data
