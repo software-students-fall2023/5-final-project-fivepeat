@@ -5,23 +5,18 @@
 A web app that gives you info about your Spotify listening habits, recommends songs, and also tests your music knowledge!
 
 ## DockerHub Links
-
-Continuous delivery to Docker Hub: https://hub.docker.com/repository/docker/megalo99/fivepeat/general
+https://hub.docker.com/r/emxyz/5-final-project-fivepeat-web
 
 ## Instructions to Run
 1. Clone the repository from Github
+2. Navigate to the project root folder
 # Local
-2. `pipenv install`
-3. `pipenv shell`
-4. `python app.py`
+3. `pipenv install`
+4. `pipenv shell`
+5. `python app.py`
 
 # Using Docker
-2. `docker-compose up —build`
-
-
-In the root directory, run ```docker-compose up --build```
-
-Navigate to localhost:5000 to access the web app
+3. `docker-compose up —build`
 
 ### Contributors
 Danica Jin - https://github.com/dj9771    
