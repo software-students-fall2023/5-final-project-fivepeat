@@ -10,6 +10,8 @@ pymongo = "*"
 flask-pymongo = "*"
 coverage = "*"
 exceptiongroup = "*"
+gunicorn = "*"
+gevent = "*"
 
 [dev-packages]
 pytest = "*"
