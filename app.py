@@ -1,4 +1,3 @@
-from gevent.pywsgi import WSGIServer
 import requests
 from flask import Flask, redirect, request, jsonify, session, render_template
 from datetime import datetime
@@ -217,8 +216,4 @@ def history():
 
 
 if __name__ == '__main__':
-    http_server = WSGIServer(('0.0.0.0', 1234), app)
-    print("Serving on http://0.0.0.0:1234")
-
-    # Start the server using the serve_forever() method
-    http_server.serve_forever()
+    app.run(host='0.0.0.0', port=5000, debug=True)
