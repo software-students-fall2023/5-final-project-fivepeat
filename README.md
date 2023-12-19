@@ -6,7 +6,12 @@ A web app that gives you info about your Spotify listening habits, recommends so
 
 ## DockerHub Links
 
-## Instructions
+Continuous delivery to Docker Hub: https://hub.docker.com/repository/docker/megalo99/fivepeat/general
+
+## Instructions to Run
+
+In the root directory, run ```docker-compose up --build```
+Navigate to localhost:5000 to access the web app
 
 ### Contributors
 Danica Jin - https://github.com/dj9771    
