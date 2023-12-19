@@ -2,7 +2,7 @@
 
 # Do You Know Your Own Music?
 
-A web app that gives you info about your Spotify listening habits, recommends songs, and also tests your music knowledge.
+A web app that gives you info about your Spotify listening habits, recommends songs, and also tests your music knowledge!
 
 ## DockerHub Links
 
