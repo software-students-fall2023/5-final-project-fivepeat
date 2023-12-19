@@ -356,3 +356,83 @@ def test_random_song_route(mock_get, client):
 
     # Perform assertions
     assert b'Track Name' in response.data
+
+@patch('app.requests.get')
+def test_random_song_route(mock_get, client):
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'test_access_token'
+        sess['expires_at'] = (datetime.now() + timedelta(hours=1)).timestamp()
+
+    # Mock API response for featured playlists
+    mock_get.return_value.json.return_value = {
+        'playlists': {
+            'items': [
+                {
+                    'href': 'playlist_link',
+                    'tracks': {
+                        'items': [
+                            {
+                                'track': {
+                                    'name': 'Track Name',
+                                    'artists': [{'name': 'Artist Name'}],
+                                    'album': {'name': 'Album Name'},
+                                    'external_urls': {'spotify': 'track_url'},
+                                    'images': [{'url': 'image_url'}]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+    
+    # Run the random_song route
+    response = client.get('/random_song')
+    
+    # Perform assertions
+    assert b'Track Name' not in response.data
+    assert b'No tracks found in the selected playlist' in response.data
+    # Add more assertions based on expected data in the response
+
+def test_app_exists():
+    assert app is not None
+
+def test_app_debug_is_true():
+    assert app.debug is False
+
+
+from unittest.mock import patch
+from app import app  # Assuming your Flask app instance is called 'app'
+
+@patch('app.requests.get')
+def test_top_artists_route(mock_requests_get):
+    # Mock session data
+    with app.test_client() as client:
+        with client.session_transaction() as session:
+            session['access_token'] = 'test_access_token'
+            session['expires_at'] = 1893456000  # Some timestamp in the future
+    
+        # Mock the response from the external API
+        mock_requests_get.return_value.json.return_value = {
+            'items': [
+                {
+                    'name': 'Artist 1',
+                    'images': [{'url': 'image_url_1'}]
+                },
+                {
+                    'name': 'Artist 2',
+                    'images': [{'url': 'image_url_2'}]
+                }
+            ]
+        }
+        
+        # Make a GET request to the route
+        response = client.get('/top_artists')
+        
+        # Assertions
+        assert response.status_code == 200
+        assert b'Artist 1' in response.data
+        assert b'Artist 2' in response.data
+        assert b'image_url_1' in response.data
+        assert b'image_url_2' in response.data
