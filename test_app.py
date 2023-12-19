@@ -235,3 +235,70 @@ def test_quiz_submit_route(mock_insert_one, client):
         "Result": 'Correct!',
         "timestamp_field": datetime.utcnow()
     })
+
+@patch('app.db.collection.insert_one')
+def test_quiz_submit_route(mock_insert_one, client):
+    # Set up session data with required keys excluding 'features1'
+    with client.session_transaction() as sess:
+        sess['correct_answer'] = 'correct_answer_id'
+        sess['quiz_data'] = {
+            'song1': {'name': 'Song 1'},
+            'song2': {'name': 'Song 2'},
+            'song1_image_url': 'image_url_1',
+            'song2_image_url': 'image_url_2'
+            # Add other required data here
+        }
+
+    # Simulate a POST request with the form data containing the correct answer
+    request_data = {'answer1': 'correct_answer_id'}
+    response = client.post('/quiz/submit', data=request_data)
+
+    # Assertions
+    assert response.status_code == 200
+    assert b'Correct!' in response.data  # Assuming the template renders 'Correct!' for a correct answer
+    mock_insert_one.assert_called_once()
+
+
+@pytest.fixture
+def mock_features_response():
+    # Define and return your mocked features response here
+    pass
+
+@pytest.fixture
+def mock_tracks_response():
+    # Define and return your mocked tracks response here
+    pass
+
+def test_quiz_route_redirects_to_login_when_no_access_token(mock_features_response, mock_tracks_response, client):
+    # Mock 'access_token' not in session
+    with client.session_transaction() as sess:
+        sess.clear()  # Clear any existing session data
+    
+    response = client.get('/quiz')
+    assert response.status_code == 302
+    assert response.location == '/login'
+
+
+@patch('app.requests.get')
+@patch('app.requests.get')
+def test_top_artists_redirects_to_login_when_no_access_token(mock_response_1, mock_response_2, client):
+    # Mock 'access_token' not in session
+    with client.session_transaction() as sess:
+        sess.clear()  # Clear any existing session data
+    
+    response = client.get('/top_artists')
+    assert response.status_code == 302
+    assert response.location == '/login'
+
+@patch('app.requests.get')
+@patch('app.requests.get')
+def test_top_artists_redirects_to_refresh_token_when_expired(mock_response_1, mock_response_2, client):
+    # Mock 'access_token' in session but expired
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'test_access_token'
+        sess['expires_at'] = (datetime.now() - timedelta(hours=1)).timestamp()
+        # Add any other required data to the session
+    
+    response = client.get('/top_artists')
+    assert response.status_code == 302
+    assert response.location == '/refresh-token'
