@@ -21,3 +21,22 @@ def test_login_route(client):
     response = client.get('/login')
     assert response.status_code == 302  # Ensure proper redirection
 
+# Test if unauthorized access to restricted pages redirects to login
+def test_top_artists_route_unauthorized(client):
+    response = client.get('/top_artists')
+    assert response.status_code == 302
+    assert b'/login' in response.data  # Check if redirected to login page
+
+# Test if valid access token grants access to '/top_artists' route
+def test_top_artists_route_authorized(client):
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'valid_token_here'
+        sess['expires_at'] = 9999999999  # Future timestamp
+
+    response = client.get('/top_artists')
+    assert response.status_code == 200
+
+# Test handling of callback with an error
+def test_callback_error_handling(client):
+    response = client.get('/callback?error=some_error')
+    assert response.status_code == 200  # Check if it handles error
