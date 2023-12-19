@@ -3,9 +3,9 @@
 # Do You Know Your Own Music?
 
 A web app that gives you info about your Spotify listening habits, recommends songs, and also tests your music knowledge!
-
+Please contact us with your spotify email, so that we can register you on the API developer server!
 ## Deployed App
-
+https://whale-app-4h3br.ondigitalocean.app/
 
 ## DockerHub Links
 https://hub.docker.com/r/emxyz/5-final-project-fivepeat-web
