@@ -9,9 +9,10 @@ requests = "*"
 pymongo = "*"
 flask-pymongo = "*"
 coverage = "*"
+exceptiongroup = "*"
 
 [dev-packages]
 pytest = "*"
 
 [requires]
-
+python = "3.12"
