@@ -12,6 +12,7 @@ coverage = "*"
 exceptiongroup = "*"
 gunicorn = "*"
 gevent = "*"
+uwsgi = "*"
 
 [dev-packages]
 pytest = "*"
