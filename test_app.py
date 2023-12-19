@@ -40,3 +40,34 @@ def test_top_artists_route_authorized(client):
 def test_callback_error_handling(client):
     response = client.get('/callback?error=some_error')
     assert response.status_code == 200  # Check if it handles error
+
+# Testing the '/refresh-token' route for unauthorized access
+def test_refresh_token_route_unauthorized(client):
+    response = client.get('/refresh-token')
+    assert response.status_code == 302
+    assert b'/login' in response.data  # Check if redirected to login page
+
+# Test if valid refresh token grants access to '/refresh-token' route
+'''def test_refresh_token_route_authorized(client):
+    with client.session_transaction() as sess:
+        sess['refresh_token'] = 'valid_refresh_token_here'
+        sess['expires_at'] = 9999999999  # Future timestamp
+
+    response = client.get('/refresh-token')
+    assert response.status_code == 302
+    assert b'/top_artists' in response.data  # Check if redirected to top_artists'''
+
+# Testing the '/quiz' route for unauthorized access
+def test_quiz_route_unauthorized(client):
+    response = client.get('/quiz')
+    assert response.status_code == 302
+    assert b'/login' in response.data  # Check if redirected to login page
+
+# Test if valid access token grants access to '/quiz' route
+'''def test_quiz_route_authorized(client):
+    with client.session_transaction() as sess:
+        sess['access_token'] = 'valid_token_here'
+        sess['expires_at'] = 9999999999  # Future timestamp
+
+    response = client.get('/quiz')
+    assert response.status_code == 200'''
