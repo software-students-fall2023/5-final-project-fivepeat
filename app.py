@@ -10,7 +10,7 @@ app.secret_key = 'a1w12lje-df2jgd45kjg-s2fs3d8'
 
 CLIENT_ID = 'ebd35c5b8a8644bc9eb08657951956ac'
 CLIENT_SECRET = '9a0a789fc56b4a9fa43c66a093dfdd84'
-REDIRECT_URI = 'http://localhost:5000/callback'
+REDIRECT_URI = 'https://whale-app-4h3br.ondigitalocean.app/final-project-fivepeat2/callback'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 API_BASE_URL = 'https://api.spotify.com/v1/'
