@@ -85,6 +85,7 @@ def top_artists():
 
 @app.route('/refresh-token')
 def refresh_token():
+    req_body = {}
     if 'refresh_token' not in session:
         return redirect('/login')
     if datetime.now().timestamp() > session['expires_at']:
@@ -145,6 +146,9 @@ def quiz_submit():
     correct_answer = session.get('correct_answer')
     quiz_data = session.get('quiz_data', {})
     
+    song1_features = quiz_data['song1'].get('features1') if 'features1' in quiz_data.get('song1', {}) else None
+    song2_features = quiz_data['song2'].get('features2') if 'features2' in quiz_data.get('song2', {}) else None
+
     if submitted_answer == correct_answer:
         result = "Correct!"
     else:
@@ -153,9 +157,9 @@ def quiz_submit():
     """Saves quiz into the MongoDB database"""
     data = {
         "Song 1 Name": quiz_data['song1']['name'],
-        "Song 1 Features": quiz_data['features1'],
+        "Song 1 Features": song1_features,
         "Song 2 Name": quiz_data['song2']['name'],
-        "Song 2 Features": quiz_data['features2'],
+        "Song 2 Features": song2_features,
         "Song 1 Image URL": quiz_data['song1_image_url'],
         "Song 2 Image URL": quiz_data['song2_image_url'],
         "Result": result,
